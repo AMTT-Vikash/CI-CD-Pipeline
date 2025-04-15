@@ -3,7 +3,7 @@ name: Deploy and Restart Docker on VM
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
