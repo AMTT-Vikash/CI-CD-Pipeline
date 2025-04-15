@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy and Restart Docker
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+          ssh -o -tt StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             cd /home/ubuntu/CI-CD-Pipeline
             git pull origin main
             docker build -t web-app:latest .
