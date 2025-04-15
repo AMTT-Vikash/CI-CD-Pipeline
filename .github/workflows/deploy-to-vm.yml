@@ -3,7 +3,7 @@ name: Deploy and Restart Docker on VM
 on:
   push:
     branches:
-      - main
+      - github-action-main
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             cd /home/ubuntu/CI-CD-Pipeline
-            git pull origin main
+            git pull origin github-action-main
             docker build -t web-app:latest .
             docker stop web-app || true
             docker rm web-app || true
