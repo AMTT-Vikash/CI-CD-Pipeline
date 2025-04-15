@@ -1,0 +1,30 @@
+name: Deploy and Restart Docker on VM
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy and Restart Docker
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+            cd /home/ubuntu/CI-CD-Pipeline
+            git pull origin main
+            docker build -t web-app:latest .
+            docker stop web-app || true
+            docker rm web-app || true
+            docker run -d --name web-app -p 3000:3000 web-app:latest
+          EOF
